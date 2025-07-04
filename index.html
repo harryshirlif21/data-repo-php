@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Repository Homepage</title>
+    <!-- Tailwind CSS CDN for modern styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Link to your custom CSS file (if you have one, otherwise these styles are handled inline or by Tailwind) -->
+    <link rel="stylesheet" href="homepage.css">
+    <style>
+        /* Basic inline styles to mimic some of the original design, adjust as needed in homepage.css */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6; /* Light gray background */
+            margin: 0;
+        }
+        .top-navigation-bar {
+            background-color: #ffffff;
+            padding: 1rem;
+            border-bottom: 1px solid #e5e7eb;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            /* Add more styling for your actual navigation bar */
+        }
+        .homepage-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        .homepage-content {
+            padding-top: 1rem; /* Adjust to accommodate fixed nav bar if any */
+        }
+        .hero-section {
+            text-align: center;
+            padding: 8rem 0; /* Increased padding to enlarge height */
+            background-color: #ffffff;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+            /* Added background image styles */
+            background-image: url('laptop.jpg'); /* Placeholder image */
+            background-size: cover;
+            background-position: center;
+            color: #ffffff; /* Default text color for contrast */
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.5); /* Add text shadow for readability */
+        }
+        .hero-section h1 {
+            font-size: 3rem;
+            font-weight: bold; /* Already bold, reinforcing */
+            margin-bottom: 1rem;
+            color: #ff7433; /* Changed to green */
+        }
+        .hero-section .highlight {
+            color: #a7f3d0; /* Lighter color for highlight on dark background, can be adjusted */
+        }
+        .hero-section .subtitle {
+            font-size: 1.25rem;
+            color: #4916f4; /* Changed to blue */
+            max-width: 600px;
+            margin: 0 auto;
+            font-weight: bold; /* Made bold */
+        }
+        .activity-section, .categories-section, .about-card {
+            background-color: #ffffff;
+            border-radius: 0.75rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+        h2 {
+            font-size: 1.75rem;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem; /* Space between icon and text */
+        }
+        .activity-list .activity-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid #e5e7eb;
+            color: #4b5563;
+        }
+        .activity-list .activity-item:last-child {
+            border-bottom: none;
+        }
+        .activity-item .action {
+            font-weight: 500;
+            color: #2563eb; /* Blue for action */
+        }
+        .category-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+        }
+        .category-card {
+            text-align: center;
+            padding: 1.5rem;
+            border: 1px solid #e5e7eb;
+            border-radius: 0.5rem;
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+        .category-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+        }
+        .category-icon {
+            font-size: 2.5rem; /* Adjust icon size */
+            color: #2563eb;
+            margin-bottom: 0.75rem;
+        }
+        .category-card h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 0.5rem;
+        }
+        .category-card p {
+            color: #6b7280;
+        }
+        .about-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+        .about-card h2 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        .about-card p {
+            color: #4b5563;
+            line-height: 1.6;
+        }
+
+        /* Dropdown specific styles */
+        .dropdown {
+            position: relative;
+            /* Tailwind flex layout will handle the inline-block nature within the flex container */
+        }
+
+        .dropdown-content {
+            position: absolute;
+            background-color: #000000; /* Black background */
+            min-width: 160px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 10; /* Ensure it's above other content */
+            border-radius: 0.5rem;
+            top: calc(100% + 0.5rem); /* Position slightly below the parent, with a small gap */
+            left: 0;
+            padding: 0.5rem 0;
+            /* Toggled by JS using 'hidden' class */
+            opacity: 0; /* Start hidden for smoother transition */
+            transform: translateY(-10px); /* Start slightly above */
+            transition: opacity 0.2s ease-out, transform 0.2s ease-out;
+            pointer-events: none; /* Disable events when hidden */
+        }
+
+        .dropdown-content:not(.hidden) { /* When not hidden, show */
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto; /* Enable events when visible */
+        }
+
+
+        .dropdown-content a {
+            color: #f9f9f9; /* Light color for text on black background */
+            padding: 0.75rem 1rem;
+            text-decoration: none;
+            display: block;
+            text-align: left;
+            border-radius: 0.25rem; /* Slightly rounded corners for items */
+            white-space: nowrap; /* Prevent category names from wrapping */
+        }
+
+        .dropdown-content a:hover {
+            background-color: #22c55e; /* Green for hover */
+            color: #ffffff; /* White text on hover */
+        }
+    </style>
+</head>
+<body>
+   
+    <nav class="top-navigation-bar">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
+            <div class="flex-shrink-0">
+                <a href="#" class="text-2xl font-bold text-blue-600">DataRepo</a>
+            </div>
+            <div class="hidden md:block">
+                <div class="ml-10 flex items-baseline space-x-4">
+                    <a href="#" class="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium">Home</a>
+
+                    <!-- Datasets Dropdown -->
+                    <div class="dropdown">
+                        <a href="#" class="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium" id="datasets-dropdown-toggle">
+                            Datasets <span class="ml-1">&#9662;</span> <!-- Down arrow unicode -->
+                        </a>
+                        <div class="dropdown-content hidden" id="datasets-dropdown-content">
+                            <a href="datasets.php?category=Healthcare">Healthcare</a>
+                            <a href="datasets.php?category=Finance">Finance</a>
+                            <a href="datasets.php?category=Climate Science">Climate Science</a>
+                            <a href="datasets.php?category=Education">Education</a>
+                            <a href="datasets.php?category=Transport">Transport</a>
+                            <a href="datasets.php?category=Agriculture">Agriculture</a>
+                        </div>
+                    </div>
+
+                    <a href="#" class="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium">About</a>
+                    <a href="login.html" class="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium">Login</a>
+                    <a href="registration.php" class="text-white bg-blue-600 hover:bg-blue-700 px-3 py-2 rounded-md text-sm font-medium">Register</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="homepage-container">
+        <main class="homepage-content">
+
+            <section class="hero-section">
+                <h1>Welcome to <span class="highlight">DataRepo</span></h1>
+                <p class="subtitle">
+                    A secure platform for storing, sharing, and analyzing datasets to accelerate your research and innovation.
+                </p>
+            </section>
+
+           
+
+            <section class="categories-section">
+                <h2>Browse by Industry</h2>
+                <div class="category-grid">
+                    <!-- The categories for this section will still be driven by PHP from the $dataCategories array
+                         if you re-introduce it or manually list them here.
+                         For now, this section uses hardcoded category names from the previous PHP array for demonstration.
+                    -->
+                    <div class="category-card">
+                        <div class="category-icon"></div>
+                        <h3>Healthcare</h3>
+                        <p>42 datasets</p>
+                    </div>
+                    <div class="category-card">
+                        <div class="category-icon"></div>
+                        <h3>Finance</h3>
+                        <p>35 datasets</p>
+                    </div>
+                    <div class="category-card">
+                        <div class="category-icon"></div>
+                        <h3>Climate Science</h3>
+                        <p>28 datasets</p>
+                    </div>
+                    <div class="category-card">
+                        <div class="category-icon"></div>
+                        <h3>Education</h3>
+                        <p>90 datasets</p>
+                    </div>
+                    <div class="category-card">
+                        <div class="category-icon"></div>
+                        <h3>Transport</h3>
+                        <p>100 datasets</p>
+                    </div>
+                    <div class="category-card">
+                        <div class="category-icon"></div>
+                        <h3>Agriculture</h3>
+                        <p>28 datasets</p>
+                    </div>
+                </div>
+            </section>
+
+            <div class="about-grid">
+                <section class="about-card">
+                    <h2>What is DataRepo?</h2>
+                    <p>
+                        DataRepo is a centralized hub for structured and unstructured datasets. It supports version control,
+                        secure access, and team collaboration — all tailored for data-driven organizations.
+                    </p>
+                </section>
+
+                <section class="about-card">
+                    <h2>About the Team</h2>
+                    <p>
+                        Developed by <strong>Bob's Analytics</strong>, a leading provider of open data infrastructure.
+                        Trusted globally since 2025 by universities, government agencies, and enterprises.
+                    </p>
+                </section>
+
+                <section class="about-card">
+                    <h2>Our Mission</h2>
+                    <p>
+                        To democratize access to reliable data while ensuring security and privacy. Designed for researchers,
+                        analysts, students, and innovators who seek fast and trusted data solutions.
+                    </p>
+                </section>
+            </div>
+
+        </main>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const dropdownToggle = document.getElementById('datasets-dropdown-toggle');
+            const dropdownContent = document.getElementById('datasets-dropdown-content');
+
+            dropdownToggle.addEventListener('click', function(event) {
+                event.preventDefault(); // Prevent default link behavior
+                event.stopPropagation(); // Stop event from bubbling to window click
+                dropdownContent.classList.toggle('hidden');
+            });
+
+            // Close the dropdown if the user clicks outside of it
+            window.addEventListener('click', function(event) {
+                if (!dropdownToggle.contains(event.target) && !dropdownContent.contains(event.target)) {
+                    dropdownContent.classList.add('hidden');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

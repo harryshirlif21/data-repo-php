@@ -1,0 +1,62 @@
+/* styles.css */
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f8f9fa;
+  color: #212529;
+}
+
+.card {
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.card-header {
+  background-color: #f1f1f1;
+  font-weight: 600;
+  font-size: 1.1rem;
+}
+
+.btn {
+  border-radius: 6px;
+}
+
+.btn-success {
+  background-color: #28a745;
+  border: none;
+}
+
+.btn-success:hover {
+  background-color: #218838;
+}
+
+.btn-danger {
+  background-color: #dc3545;
+  border: none;
+}
+
+.btn-danger:hover {
+  background-color: #c82333;
+}
+
+.table {
+  margin-bottom: 0;
+}
+
+#adminProfile {
+  font-size: 0.95rem;
+  margin-bottom: 20px;
+}
+
+.alert {
+  margin-top: 15px;
+}
+
+@media (max-width: 768px) {
+  .vh-100 {
+    height: auto !important;
+  }
+  .col-md-3, .col-md-9 {
+    padding: 1rem;
+  }
+}
